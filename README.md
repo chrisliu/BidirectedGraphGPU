@@ -1,5 +1,4 @@
 # Bidirected Graph GPU
----
 A GPU implementation of bidirected graphs.
 
 ## Other Links
