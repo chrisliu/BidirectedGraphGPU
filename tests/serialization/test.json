@@ -1,0 +1,30 @@
+{
+	"edge" : 
+	[
+		{
+			"from" : 2,
+			"from_start" : true,
+			"to" : 3
+		},
+		{
+			"from" : 1,
+			"to" : 2,
+			"to_end" : true
+		}
+	],
+	"node" : 
+	[
+		{
+			"id" : 3,
+			"sequence" : ""
+		},
+		{
+			"id" : 2,
+			"sequence" : ""
+		},
+		{
+			"id" : 1,
+			"sequence" : ""
+		}
+	]
+}
