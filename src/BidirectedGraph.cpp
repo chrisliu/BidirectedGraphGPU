@@ -3,9 +3,11 @@
 
 #include <handlegraph/util.hpp>
 
+using namespace std;
+using namespace handlegraph;
+
 #ifdef DEBUG_BIDIRECTED_GRAPH
 #include <iostream>
-using namespace std;
 #endif /* DEBUG_BIDIRECTED_GRAPH */
 
 

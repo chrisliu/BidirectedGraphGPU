@@ -1,5 +1,5 @@
-#ifndef BidirectedGraph_hpp
-#define BidirectedGraph_hpp
+#ifndef BIDIRECTEDGRAPH_HPP 
+#define BIDIRECTEDGRAPH_HPP
 
 // #define DEBUG_BIDIRECTED_GRAPH
 
@@ -12,20 +12,17 @@
 
 /* Handlegraph includes */
 #include <handlegraph/deletable_handle_graph.hpp>
-#include <handlegraph/types.hpp>
-
-using namespace std;
-using namespace handlegraph;
+#include "handle.hpp"
 
 class BidirectedGraph : public DeletableHandleGraph {
     private:
-        unordered_map<nid_t, string> nodes;
-        unordered_map<handle_t, unordered_set<handle_t>> edges;
+        std::unordered_map<nid_t, std::string> nodes;
+        std::unordered_map<handle_t, std::unordered_set<handle_t>> edges;
         nid_t cur_id = 0;
 
     public:
-        bool deserialize(ifstream& infile);        
-        bool serialize(ofstream& outfile);
+        bool deserialize(std::ifstream& infile);        
+        bool serialize(std::ofstream& outfile);
 
         /// Method to check if a node exists by ID
         bool has_node(nid_t node_id) const;
@@ -47,7 +44,7 @@ class BidirectedGraph : public DeletableHandleGraph {
         
         /// Get the sequence of a node, presented in the handle's local forward
         /// orientation.
-        string get_sequence(const handle_t& handle) const;
+        std::string get_sequence(const handle_t& handle) const;
         
         /// Return the number of nodes in the graph
         size_t get_node_count() const;
@@ -61,10 +58,10 @@ class BidirectedGraph : public DeletableHandleGraph {
         nid_t max_node_id() const;
 
         /// Create a new node with the given sequence and return the handle.
-        handle_t create_handle(const string& sequence);
+        handle_t create_handle(const std::string& sequence);
 
         /// Create a new node with the given id and sequence, then return the handle.
-        handle_t create_handle(const string& sequence, const nid_t& id);
+        handle_t create_handle(const std::string& sequence, const nid_t& id);
         
         /// Create an edge connecting the given handles in the given order and orientations.
         /// Ignores existing edges.
@@ -87,7 +84,7 @@ class BidirectedGraph : public DeletableHandleGraph {
         /// handles come in the order and orientation appropriate for the handle
         /// passed in.
         /// Updates stored paths.
-        vector<handle_t> divide_handle(const handle_t& handle, const vector<size_t>& offsets);
+        std::vector<handle_t> divide_handle(const handle_t& handle, const std::vector<size_t>& offsets);
         
         /// Adjust the representation of the graph in memory to improve performance.
         /// Optionally, allow the node IDs to be reassigned to further improve
@@ -100,7 +97,7 @@ class BidirectedGraph : public DeletableHandleGraph {
         /// This sets the order that is used for iteration in functions like for_each_handle.
         /// Optionally may compact the id space of the graph to match the ordering, from 1->|ordering|.
         /// This may be a no-op in the case of graph implementations that do not have any mechanism to maintain an ordering.
-        void apply_ordering(const vector<handle_t>& order, bool compact_ids = false);
+        void apply_ordering(const std::vector<handle_t>& order, bool compact_ids = false);
 
         /// Set a minimum id to increment the id space by, used as a hint during construction.
         /// May have no effect on a backing implementation.
@@ -112,7 +109,7 @@ class BidirectedGraph : public DeletableHandleGraph {
         /// The mapping function may return 0. In this case, the input ID will
         /// remain unchanged. The mapping function should not return any ID for
         /// which it would return 0.
-        void reassign_node_ids(const function<nid_t(const nid_t&)>& get_new_id);
+        void reassign_node_ids(const std::function<nid_t(const nid_t&)>& get_new_id);
 
         /// Remove the node belonging to the given handle and all of its edges.
         /// Does not update any stored paths.
@@ -135,7 +132,7 @@ class BidirectedGraph : public DeletableHandleGraph {
         /// Loop over all the handles to next/previous (right/left) nodes. Passes
         /// them to a callback which returns false to stop iterating and true to
         /// continue. Returns true if we finished and false if we stopped early.
-        bool follow_edges_impl(const handle_t& handle, bool go_left, const function<bool(const handle_t&)>& iteratee) const;
+        bool follow_edges_impl(const handle_t& handle, bool go_left, const std::function<bool(const handle_t&)>& iteratee) const;
         
         /// Loop over all the nodes in the graph in their local forward
         /// orientations, in their internal stored order. Stop if the iteratee
@@ -143,6 +140,6 @@ class BidirectedGraph : public DeletableHandleGraph {
         /// after a false return value is on a best-effort basis and iteration
         /// order is not defined. Returns true if we finished and false if we 
         /// stopped early.
-        bool for_each_handle_impl(const function<bool(const handle_t&)>& iteratee, bool parallel = false) const;
+        bool for_each_handle_impl(const std::function<bool(const handle_t&)>& iteratee, bool parallel = false) const;
 };
-#endif /* BidirectedGraph_hpp */
+#endif /* BIDIRECTEDGRAPH_GPU */
