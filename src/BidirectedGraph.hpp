@@ -11,7 +11,6 @@
 #include <string>
 
 /* Handlegraph includes */
-#include <handlegraph/deletable_handle_graph.hpp>
 #include "handle.hpp"
 
 class BidirectedGraph : public DeletableHandleGraph {
