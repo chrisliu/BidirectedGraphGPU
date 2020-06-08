@@ -25,16 +25,16 @@ int main(int argc, char* argv[]) {
     for (size_t nid = 0; nid < gpu_g.size; nid++) {
         gpu_idx = 2 * nid;
         std::cout << (nid + 1) << "l" << " " << gpu_idx << std::endl;
-        for (size_t c = gpu_g.neighbor_start[gpu_idx]; c < gpu_g.neighbor_start[gpu_idx + 1]; c++) {
-            nid_t child_idx = gpu_g.adjacency[c];
+        for (size_t c = gpu_g.h_neighbor_start[gpu_idx]; c < gpu_g.h_neighbor_start[gpu_idx + 1]; c++) {
+            nid_t child_idx = gpu_g.h_adjacency[c];
             nid_t nid = child_idx / 2 + 1;
             bool is_reverse = child_idx % 2 == 0;
             std::cout << "| " << nid << (is_reverse ? 'l' : 'r') << " " << child_idx << std::endl; 
         }
         gpu_idx = 2 * nid + 1;
         std::cout << (nid + 1) << "r" << " " << gpu_idx << std::endl;
-        for (size_t c = gpu_g.neighbor_start[gpu_idx]; c < gpu_g.neighbor_start[gpu_idx + 1]; c++) {
-            nid_t child_idx = gpu_g.adjacency[c];
+        for (size_t c = gpu_g.h_neighbor_start[gpu_idx]; c < gpu_g.h_neighbor_start[gpu_idx + 1]; c++) {
+            nid_t child_idx = gpu_g.h_adjacency[c];
             nid_t nid = child_idx / 2 + 1;
             bool is_reverse = child_idx % 2 == 0;
             std::cout << "| " << nid << (is_reverse ? 'l' : 'r') << " " << child_idx << std::endl; 

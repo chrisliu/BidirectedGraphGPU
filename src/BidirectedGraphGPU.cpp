@@ -11,7 +11,7 @@ void BidirectedGraphGPU::copy_to_GPU(HandleGraph& host_graph) {
     size = host_graph.get_node_count();
 
     /// Initialize node tracking lists
-    neighbor_start = (nid_t*) malloc(2 * size * sizeof(nid_t) + 1); // Placeholder for cudaMalloc
+    h_neighbor_start = (nid_t*) malloc(2 * size * sizeof(nid_t) + 1); // Placeholder for cudaMalloc
 
     /// Get the size of adjacency 
     size_t edges_count = 0;
@@ -28,7 +28,7 @@ void BidirectedGraphGPU::copy_to_GPU(HandleGraph& host_graph) {
     };
 
     /// Stored as [1l, 1r, 2l, 2r, ...]
-    adjacency = (nid_t*) malloc(edges_count * sizeof(nid_t)); // Placeholder for cudaMalloc
+    h_adjacency = (nid_t*) malloc(edges_count * sizeof(nid_t)); // Placeholder for cudaMalloc
     /** Important:
      * Using the assumption that node ids begin at 1 and end at get_node_count().
      * This method is not tolerant of ids that skip. In a more robust 
@@ -39,22 +39,29 @@ void BidirectedGraphGPU::copy_to_GPU(HandleGraph& host_graph) {
     for (nid_t nid = 1; nid <= size; nid++) {
         handle_t handle = host_graph.get_handle(nid, true);
 
-        neighbor_start[2 * (nid - 1)] = adjacency_i;
+        h_neighbor_start[2 * (nid - 1)] = adjacency_i;
         host_graph.follow_edges(handle, false, [&](const handle_t& nei_handle) {
-            adjacency[adjacency_i] = handle_to_GPU_index(nei_handle);
+            h_adjacency[adjacency_i] = handle_to_GPU_index(nei_handle);
             adjacency_i++;
         });
 
-        neighbor_start[2 * (nid - 1) + 1] = adjacency_i;
+        h_neighbor_start[2 * (nid - 1) + 1] = adjacency_i;
         host_graph.follow_edges(host_graph.flip(handle), false, [&](const handle_t& nei_handle) {
-            adjacency[adjacency_i] = handle_to_GPU_index(nei_handle);
+            h_adjacency[adjacency_i] = handle_to_GPU_index(nei_handle);
             adjacency_i++;
         });
     }
-    neighbor_start[2 * size] = adjacency_i;
+    h_neighbor_start[2 * size] = adjacency_i;
+
+#ifndef HOST_DEBUG
+    free(h_adjacency);
+    free(h_neighbor_start);
+#endif /* HOST_DEBUG */
 }
 
 void BidirectedGraphGPU::dealloc() {
-    free(adjacency);
-    free(neighbor_start);
+#ifdef HOST_DEBUG
+    free(h_adjacency);
+    free(h_neighbor_start);
+#endif /* HOST_DEBUG */
 }
