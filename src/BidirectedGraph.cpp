@@ -141,7 +141,7 @@ size_t BidirectedGraph::get_node_count() const {
 /// smallest ID is unavailable. Return value is unspecified if the graph is empty.
 nid_t BidirectedGraph::min_node_id() const {
     auto res = min_element(nodes.begin(), nodes.end(),
-        [] (const auto& n1, const auto& n2) {
+        [] (const pair<nid_t, string>& n1, const pair<nid_t, string>& n2) {
             return n1.first < n2.first;
         }
     );
@@ -155,7 +155,7 @@ nid_t BidirectedGraph::min_node_id() const {
 /// largest ID is unavailable. Return value is unspecified if the graph is empty.
 nid_t BidirectedGraph::max_node_id() const {
     auto res = max_element(nodes.begin(), nodes.end(),
-        [](const auto& n1, const auto& n2) {
+        [](const pair<nid_t, string>& n1, const pair<nid_t, string>& n2) {
             return n1.first < n2.first;
         }
     );
