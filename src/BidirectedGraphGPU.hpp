@@ -18,7 +18,6 @@ private: // Hide helper functions
 public: // Otherwise this is a glorified struct
     nid_t* adjacency;      /// List of neighbors for all node sides
     nid_t* neighbor_start; /// Where the neighbor list begins for a node side
-    nid_t* neighbor_count; /// How many neighbors for a node side 
     size_t size;           /// NODE count of the graph
 
 
