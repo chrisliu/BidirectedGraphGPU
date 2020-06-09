@@ -73,6 +73,6 @@ void BidirectedGraphGPU::dealloc() {
     free(h_adjacency);
     free(h_neighbor_start);
 #endif /* DEBUG_HOST */
-    cudaFree(adjacency);
-    cudaFree(neighbor_start);
+    HANDLE_ERROR(cudaFree(neighbor_start));
+    HANDLE_ERROR(cudaFree(adjacency));
 }
