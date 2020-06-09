@@ -1,0 +1,32 @@
+{
+    "description": "This graph has an inversion.",
+    "node": [
+        {
+            "id": 1,
+            "sequence": ""
+        },
+        {
+            "id": 2,
+            "sequence": ""
+        },
+        {
+            "id": 3,
+            "sequence": ""
+        }
+    ],
+    "edge": [
+        {
+            "from": 1,
+            "to": 2
+        },
+        {
+            "from": 2,
+            "to": 2,
+            "to_end": true
+        },
+        {
+            "from": 3,
+            "to": 2
+        }
+    ]
+}
