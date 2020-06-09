@@ -22,9 +22,8 @@ int main(int argc, char* argv[]) {
 
     BidirectedGraphGPU gpu_g(g);
 
-    nid_t* distances = (nid_t*) malloc(2 * gpu_g.size * sizeof(nid_t));
-    find_sssp_gpu(gpu_g, distances);
-    free(distances);
+    distance_t* distances;
+    find_sssp_gpu(gpu_g, &distances);
 
     gpu_g.dealloc();
 
