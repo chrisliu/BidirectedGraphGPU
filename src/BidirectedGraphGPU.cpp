@@ -1,6 +1,7 @@
 #include "BidirectedGraphGPU.hpp"
 
 #include <functional>
+#include "error.hpp"
 
 BidirectedGraphGPU::BidirectedGraphGPU(HandleGraph& host_graph) {
     copy_to_GPU(host_graph);
@@ -53,15 +54,25 @@ void BidirectedGraphGPU::copy_to_GPU(HandleGraph& host_graph) {
     }
     h_neighbor_start[2 * size] = adjacency_i;
 
-#ifndef HOST_DEBUG
+    /// Move to device memory
+    HANDLE_ERROR(cudaMalloc((void**) &adjacency, edges_count * sizeof(nid_t)));
+    HANDLE_ERROR(cudaMalloc((void**) &neighbor_start, 2 * size * sizeof(nid_t) + 1));
+    HANDLE_ERROR(cudaMemcpy(adjacency, h_adjacency, 
+        edges_count * sizeof(nid_t), cudaMemcpyHostToDevice));
+    HANDLE_ERROR(cudaMemcpy(neighbor_start, h_neighbor_start, 
+        2 * size * sizeof(nid_t) + 1, cudaMemcpyHostToDevice));
+
+#ifndef DEBUG_HOST
     free(h_adjacency);
     free(h_neighbor_start);
-#endif /* HOST_DEBUG */
+#endif /* DEBUG_HOST */
 }
 
 void BidirectedGraphGPU::dealloc() {
-#ifdef HOST_DEBUG
+#ifdef DEBUG_HOST
     free(h_adjacency);
     free(h_neighbor_start);
-#endif /* HOST_DEBUG */
+#endif /* DEBUG_HOST */
+    cudaFree(adjacency);
+    cudaFree(neighbor_start);
 }
